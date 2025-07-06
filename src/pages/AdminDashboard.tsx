@@ -34,7 +34,9 @@ import {
   Server,
   Wifi,
   HardDrive,
-  MoreHorizontal
+  MoreHorizontal,
+  Home,
+  Navigation
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDataStore } from '../store/dataStore';
@@ -42,6 +44,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
+import { Separator } from '../components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Input } from '../components/ui/input';
@@ -207,6 +210,12 @@ const AdminDashboard: React.FC = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <Button asChild>
+                <Link to="/cms">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Content Management
+                </Link>
+              </Button>
               <Button variant="outline">
                 <Download className="w-4 h-4 mr-2" />
                 Export Data
@@ -359,6 +368,66 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Content Management Quick Access */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Edit className="w-5 h-5" />
+                  <span>Content Management</span>
+                </CardTitle>
+                <CardDescription>
+                  Manage your website content dynamically
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <Button asChild className="h-auto p-4 flex flex-col items-start space-y-2">
+                    <Link to="/cms">
+                      <div className="flex items-center space-x-2 w-full">
+                        <Home className="w-5 h-5" />
+                        <span className="font-medium">Edit Homepage</span>
+                      </div>
+                      <p className="text-sm opacity-70 text-left">Hero, stats, featured content</p>
+                    </Link>
+                  </Button>
+
+                  <Button variant="outline" asChild className="h-auto p-4 flex flex-col items-start space-y-2">
+                    <Link to="/cms">
+                      <div className="flex items-center space-x-2 w-full">
+                        <Navigation className="w-5 h-5" />
+                        <span className="font-medium">Navigation & Footer</span>
+                      </div>
+                      <p className="text-sm opacity-70 text-left">Menu links, branding</p>
+                    </Link>
+                  </Button>
+
+                  <Button variant="outline" asChild className="h-auto p-4 flex flex-col items-start space-y-2">
+                    <Link to="/cms">
+                      <div className="flex items-center space-x-2 w-full">
+                        <Settings className="w-5 h-5" />
+                        <span className="font-medium">Site Settings</span>
+                      </div>
+                      <p className="text-sm opacity-70 text-left">Global configuration</p>
+                    </Link>
+                  </Button>
+                </div>
+
+                <Separator className="my-4" />
+
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-muted-foreground">
+                    Last content update: 2 hours ago
+                  </div>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/cms">
+                      <Edit className="w-4 h-4 mr-2" />
+                      Open CMS
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -1015,6 +1084,12 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-muted-foreground">Monitor system health and manage platform settings</p>
               </div>
               <div className="flex items-center space-x-3">
+                <Button variant="outline" asChild>
+                  <Link to="/cms">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Content Management
+                  </Link>
+                </Button>
                 <Button variant="outline">
                   <Download className="w-4 h-4 mr-2" />
                   System Logs

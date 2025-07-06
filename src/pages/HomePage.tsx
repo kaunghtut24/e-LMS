@@ -18,23 +18,36 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { useDataStore } from '../store/dataStore';
 import { useAuthStore } from '../store/authStore';
+import { useCMSStore } from '../store/cmsStore';
 
 const HomePage: React.FC = () => {
   const { courses, categories, isLoading } = useDataStore();
   const { isAuthenticated } = useAuthStore();
+  const { content, loadContent } = useCMSStore();
+
+  useEffect(() => {
+    loadContent();
+  }, [loadContent]);
 
   // Get featured courses (popular and bestsellers)
   const featuredCourses = courses
     .filter(course => course.isPopular || course.isBestseller)
     .slice(0, 6);
 
-  // Stats data
-  const stats = [
-    { icon: Users, label: 'Active Students', value: '50,000+' },
-    { icon: BookOpen, label: 'Quality Courses', value: '500+' },
-    { icon: Award, label: 'Expert Instructors', value: '200+' },
-    { icon: Globe, label: 'Countries Reached', value: '100+' },
-  ];
+  // Get dynamic content from CMS
+  const homePageContent = content.homePage;
+
+  // Map icon names to actual icons
+  const iconMap: { [key: string]: any } = {
+    Users, BookOpen, Award, Globe, Play, CheckCircle, TrendingUp, Clock, Star
+  };
+
+  // Stats data from CMS
+  const stats = homePageContent.stats.map(stat => ({
+    icon: iconMap[stat.icon] || Users,
+    label: stat.label,
+    value: stat.value
+  }));
 
   // Features data
   const features = [
@@ -137,26 +150,21 @@ const HomePage: React.FC = () => {
                 🚀 Transform Your Career
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                Learn Without
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {' '}Limits
-                </span>
+                {homePageContent.hero.title}
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                Master in-demand skills with our comprehensive online courses. 
-                Join thousands of learners advancing their careers with expert-led, 
-                hands-on education.
+                {homePageContent.hero.subtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg px-8 py-3" asChild>
-                  <Link to={isAuthenticated ? "/dashboard" : "/register"}>
-                    {isAuthenticated ? "Continue Learning" : "Start Learning Today"}
+                  <Link to={homePageContent.hero.primaryButton.link}>
+                    {homePageContent.hero.primaryButton.text}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8 py-3" asChild>
-                  <Link to="/courses">
-                    Browse Courses
+                  <Link to={homePageContent.hero.secondaryButton.link}>
+                    {homePageContent.hero.secondaryButton.text}
                   </Link>
                 </Button>
               </div>
@@ -183,20 +191,20 @@ const HomePage: React.FC = () => {
                   <Play className="w-16 h-16 text-blue-600" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">
-                  Complete React & TypeScript Mastery
+                  {homePageContent.featuredCourse.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Master modern React development with TypeScript
+                  {homePageContent.featuredCourse.description}
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1">
-                    {renderStars(5)}
+                    {renderStars(homePageContent.featuredCourse.rating)}
                     <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
-                      (342 reviews)
+                      ({homePageContent.featuredCourse.reviews} reviews)
                     </span>
                   </div>
                   <div className="text-2xl font-bold text-blue-600">
-                    $149.99
+                    {formatPrice(homePageContent.featuredCourse.price)}
                   </div>
                 </div>
               </div>
@@ -405,24 +413,25 @@ const HomePage: React.FC = () => {
       <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Start Learning?
+            {homePageContent.cta.title}
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-            Join thousands of students already learning on EduLearn. 
-            Start your journey today and unlock your potential.
+            {homePageContent.cta.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" className="text-lg px-8 py-3" asChild>
-              <Link to={isAuthenticated ? "/dashboard" : "/register"}>
-                {isAuthenticated ? "Continue Learning" : "Get Started Free"}
+              <Link to={homePageContent.cta.primaryButton.link}>
+                {homePageContent.cta.primaryButton.text}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-3 text-white border-white hover:bg-white hover:text-blue-600" asChild>
-              <Link to="/courses">
-                Browse Courses
-              </Link>
-            </Button>
+            {homePageContent.cta.secondaryButton && (
+              <Button size="lg" variant="outline" className="text-lg px-8 py-3 text-white border-white hover:bg-white hover:text-blue-600" asChild>
+                <Link to={homePageContent.cta.secondaryButton.link}>
+                  {homePageContent.cta.secondaryButton.text}
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </section>

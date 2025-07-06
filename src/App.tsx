@@ -26,6 +26,7 @@ import InstructorDashboard from './pages/InstructorDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateCoursePage from './pages/CreateCoursePage';
 import CourseManagementPage from './pages/CourseManagementPage';
+import CMSPage from './pages/CMSPage';
 
 // Protected Route Component
 import ProtectedRoute from './components/ProtectedRoute';
@@ -124,6 +125,16 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={['instructor', 'admin']}>
                     <CreateCoursePage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Content Management System - Admin Only */}
+              <Route
+                path="/cms"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <CMSPage />
                   </ProtectedRoute>
                 }
               />
