@@ -3,6 +3,7 @@ export interface User {
   email: string;
   password?: string; // Optional since we don't want to expose passwords in the UI
   role: 'admin' | 'instructor' | 'student';
+  status?: 'active' | 'suspended'; // User account status
   firstName: string;
   lastName: string;
   avatar: string;

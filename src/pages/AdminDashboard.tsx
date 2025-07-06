@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -40,6 +40,8 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDataStore } from '../store/dataStore';
+import { useUserStore } from '../store/userStore';
+import UserFormModal from '../components/UserFormModal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -79,26 +81,118 @@ import {
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuthStore();
-  const { courses, progress, reviews, discussions, notifications } = useDataStore();
+  const { courses, progress, reviews, discussions, notifications, isLoading } = useDataStore();
+  const {
+    users,
+    isLoading: usersLoading,
+    loadUsers,
+    updateUserStatus,
+    updateUserRole,
+    deleteUser,
+    getTotalUsers,
+    getActiveUsers,
+    getUsersByRole,
+    getSuspendedUsers
+  } = useUserStore();
 
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterRole, setFilterRole] = useState('all');
 
-  // Mock users data (in real app, this would come from a users store)
-  const mockUsers = useMemo(() => [
-    { id: 'user-1', name: 'Emma Wilson', email: 'admin@elms.com', role: 'admin', status: 'active', joinDate: '2023-01-15', lastLogin: '2025-01-06' },
-    { id: 'user-2', name: 'Dr. Michael Chen', email: 'instructor1@elms.com', role: 'instructor', status: 'active', joinDate: '2023-02-20', lastLogin: '2025-01-05' },
-    { id: 'user-3', name: 'Sarah Johnson', email: 'instructor2@elms.com', role: 'instructor', status: 'active', joinDate: '2023-03-10', lastLogin: '2025-01-04' },
-    { id: 'user-4', name: 'Alex Rodriguez', email: 'student1@elms.com', role: 'student', status: 'active', joinDate: '2024-01-15', lastLogin: '2025-01-06' },
-    { id: 'user-5', name: 'Jennifer Lee', email: 'student2@elms.com', role: 'student', status: 'active', joinDate: '2024-02-20', lastLogin: '2025-01-05' },
-    { id: 'user-6', name: 'David Kim', email: 'student3@elms.com', role: 'student', status: 'suspended', joinDate: '2024-03-10', lastLogin: '2024-12-20' },
-  ], []);
+  // User management modal states
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  // Load users when component mounts
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
+  // User management action handlers
+  const handleUserStatusToggle = (userId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
+    updateUserStatus(userId, newStatus as 'active' | 'suspended');
+  };
+
+  const handleUserDelete = (userId: string) => {
+    if (window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      deleteUser(userId);
+    }
+  };
+
+  const handleEditUser = (user: any) => {
+    setSelectedUser(user);
+    setShowEditUserModal(true);
+  };
+
+  const handleAddUser = (userData: any) => {
+    addUser({
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      role: userData.role,
+      avatar: userData.avatar || '/images/avatars/default.jpg',
+      bio: userData.bio || '',
+      socialLinks: { linkedin: '', twitter: '', github: '' },
+      expertise: [],
+      coursesCreated: userData.role === 'instructor' ? [] : undefined,
+      totalStudents: userData.role === 'instructor' ? 0 : undefined,
+      rating: userData.role === 'instructor' ? 0 : undefined,
+      enrolledCourses: userData.role === 'student' ? [] : undefined,
+      completedCourses: userData.role === 'student' ? [] : undefined,
+      wishlist: userData.role === 'student' ? [] : undefined,
+      achievements: userData.role === 'student' ? [] : undefined,
+      preferences: { theme: 'light', notifications: true, language: 'en' }
+    });
+    setShowAddUserModal(false);
+  };
+
+  const handleUpdateUser = (userData: any) => {
+    if (selectedUser) {
+      // Update user role if changed
+      if (userData.role !== selectedUser.role) {
+        updateUserRole(selectedUser.id, userData.role);
+      }
+      // In a real app, you would also update other user fields
+      console.log('Updating user:', selectedUser.id, userData);
+    }
+    setShowEditUserModal(false);
+    setSelectedUser(null);
+  };
+
+  // Course management action handlers
+  const handleCourseStatusChange = (courseId: string, newStatus: string) => {
+    // In a real app, this would update the course status via API
+    console.log(`Changing course ${courseId} status to ${newStatus}`);
+  };
+
+  const handleCourseDelete = (courseId: string) => {
+    if (window.confirm('Are you sure you want to delete this course? This action cannot be undone.')) {
+      // In a real app, this would delete the course via API
+      console.log(`Deleting course ${courseId}`);
+    }
+  };
+
+  // Transform users data for display
+  const transformedUsers = useMemo(() => {
+    return users.map(user => ({
+      id: user.id,
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      role: user.role,
+      status: user.status || 'active',
+      joinDate: user.dateJoined,
+      lastLogin: user.lastLogin,
+      avatar: user.avatar,
+      bio: user.bio
+    }));
+  }, [users]);
 
   // Calculate platform statistics
   const platformStats = useMemo(() => {
-    const totalUsers = mockUsers.length;
-    const activeUsers = mockUsers.filter(u => u.status === 'active').length;
+    const totalUsers = getTotalUsers();
+    const activeUsers = getActiveUsers();
     const totalCourses = courses.length;
     const publishedCourses = courses.filter(c => c.status === 'published').length;
     const totalEnrollments = progress.length;
@@ -126,7 +220,7 @@ const AdminDashboard: React.FC = () => {
       storageUsed: 75, // Mock storage percentage
       bandwidthUsed: 45 // Mock bandwidth percentage
     };
-  }, [mockUsers, courses, progress, reviews]);
+  }, [users, courses, progress, reviews, getTotalUsers, getActiveUsers]);
 
   // Get recent activity
   const recentActivity = useMemo(() => {
@@ -156,13 +250,13 @@ const AdminDashboard: React.FC = () => {
 
   // Filter users based on search and role
   const filteredUsers = useMemo(() => {
-    return mockUsers.filter(user => {
+    return transformedUsers.filter(user => {
       const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            user.email.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesRole = filterRole === 'all' || user.role === filterRole;
       return matchesSearch && matchesRole;
     });
-  }, [mockUsers, searchQuery, filterRole]);
+  }, [transformedUsers, searchQuery, filterRole]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -505,7 +599,7 @@ const AdminDashboard: React.FC = () => {
                     <SelectItem value="student">Student</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button>
+                <Button onClick={() => setShowAddUserModal(true)}>
                   <Plus className="w-4 h-4 mr-2" />
                   Add User
                 </Button>
@@ -538,7 +632,7 @@ const AdminDashboard: React.FC = () => {
                     <BookOpen className="w-4 h-4 text-purple-500" />
                     <span className="text-sm text-muted-foreground">Instructors</span>
                   </div>
-                  <div className="text-2xl font-bold mt-2">{mockUsers.filter(u => u.role === 'instructor').length}</div>
+                  <div className="text-2xl font-bold mt-2">{getUsersByRole('instructor').length}</div>
                 </CardContent>
               </Card>
               <Card>
@@ -547,7 +641,7 @@ const AdminDashboard: React.FC = () => {
                     <UserX className="w-4 h-4 text-red-500" />
                     <span className="text-sm text-muted-foreground">Suspended</span>
                   </div>
-                  <div className="text-2xl font-bold mt-2">{mockUsers.filter(u => u.status === 'suspended').length}</div>
+                  <div className="text-2xl font-bold mt-2">{getSuspendedUsers()}</div>
                 </CardContent>
               </Card>
             </div>
@@ -571,12 +665,28 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.map((user) => (
+                    {usersLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          <div className="flex items-center justify-center space-x-2">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                            <span>Loading users...</span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredUsers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No users found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredUsers.map((user) => (
                       <TableRow key={user.id}>
                         <TableCell>
                           <div className="flex items-center space-x-3">
                             <Avatar className="w-8 h-8">
-                              <AvatarImage src={`/images/avatars/${user.role}.jpg`} />
+                              <AvatarImage src={user.avatar} />
                               <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                             </Avatar>
                             <div>
@@ -612,7 +722,7 @@ const AdminDashboard: React.FC = () => {
                                 <Eye className="w-4 h-4 mr-2" />
                                 View Profile
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleEditUser(user)}>
                                 <Edit className="w-4 h-4 mr-2" />
                                 Edit User
                               </DropdownMenuItem>
@@ -622,17 +732,26 @@ const AdminDashboard: React.FC = () => {
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               {user.status === 'active' ? (
-                                <DropdownMenuItem className="text-orange-600">
+                                <DropdownMenuItem
+                                  className="text-orange-600"
+                                  onClick={() => handleUserStatusToggle(user.id, user.status)}
+                                >
                                   <UserX className="w-4 h-4 mr-2" />
                                   Suspend User
                                 </DropdownMenuItem>
                               ) : (
-                                <DropdownMenuItem className="text-green-600">
+                                <DropdownMenuItem
+                                  className="text-green-600"
+                                  onClick={() => handleUserStatusToggle(user.id, user.status)}
+                                >
                                   <UserCheck className="w-4 h-4 mr-2" />
                                   Activate User
                                 </DropdownMenuItem>
                               )}
-                              <DropdownMenuItem className="text-destructive">
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={() => handleUserDelete(user.id)}
+                              >
                                 <Trash2 className="w-4 h-4 mr-2" />
                                 Delete User
                               </DropdownMenuItem>
@@ -640,7 +759,8 @@ const AdminDashboard: React.FC = () => {
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
-                    ))}
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -659,9 +779,11 @@ const AdminDashboard: React.FC = () => {
                   <Download className="w-4 h-4 mr-2" />
                   Export Courses
                 </Button>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Course
+                <Button asChild>
+                  <Link to="/create-course">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Course
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -726,8 +848,24 @@ const AdminDashboard: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {courses.slice(0, 10).map((course) => (
-                      <TableRow key={course.id}>
+                    {isLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8">
+                          <div className="flex items-center justify-center space-x-2">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                            <span>Loading courses...</span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : courses.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                          No courses found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      courses.slice(0, 10).map((course) => (
+                        <TableRow key={course.id}>
                         <TableCell>
                           <div className="flex items-center space-x-3">
                             <img
@@ -768,13 +906,17 @@ const AdminDashboard: React.FC = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
-                                <Eye className="w-4 h-4 mr-2" />
-                                View Course
+                              <DropdownMenuItem asChild>
+                                <Link to={`/course/${course.id}`}>
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  View Course
+                                </Link>
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Edit className="w-4 h-4 mr-2" />
-                                Edit Course
+                              <DropdownMenuItem asChild>
+                                <Link to={`/edit-course/${course.id}`}>
+                                  <Edit className="w-4 h-4 mr-2" />
+                                  Edit Course
+                                </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <BarChart3 className="w-4 h-4 mr-2" />
@@ -782,12 +924,18 @@ const AdminDashboard: React.FC = () => {
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               {course.status === 'draft' && (
-                                <DropdownMenuItem className="text-green-600">
+                                <DropdownMenuItem
+                                  className="text-green-600"
+                                  onClick={() => handleCourseStatusChange(course.id, 'published')}
+                                >
                                   <CheckCircle className="w-4 h-4 mr-2" />
                                   Approve Course
                                 </DropdownMenuItem>
                               )}
-                              <DropdownMenuItem className="text-destructive">
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={() => handleCourseDelete(course.id)}
+                              >
                                 <Trash2 className="w-4 h-4 mr-2" />
                                 Delete Course
                               </DropdownMenuItem>
@@ -795,7 +943,8 @@ const AdminDashboard: React.FC = () => {
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
-                    ))}
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
@@ -1248,6 +1397,28 @@ const AdminDashboard: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Add User Modal */}
+      <UserFormModal
+        isOpen={showAddUserModal}
+        onClose={() => setShowAddUserModal(false)}
+        onSubmit={handleAddUser}
+        title="Add New User"
+        submitText="Add User"
+      />
+
+      {/* Edit User Modal */}
+      <UserFormModal
+        isOpen={showEditUserModal}
+        onClose={() => {
+          setShowEditUserModal(false);
+          setSelectedUser(null);
+        }}
+        onSubmit={handleUpdateUser}
+        title="Edit User"
+        submitText="Update User"
+        initialData={selectedUser}
+      />
     </div>
   );
 };
