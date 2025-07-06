@@ -1,0 +1,309 @@
+{
+  "discussions": [
+    {
+      "id": "discussion-1",
+      "courseId": "course-1",
+      "lessonId": "lesson-1-1",
+      "userId": "user-4",
+      "userName": "Alex Rodriguez",
+      "userAvatar": "/images/avatars/student1.jpg",
+      "userRole": "student",
+      "title": "Question about React Virtual DOM",
+      "content": "Hi everyone! I'm a bit confused about how the Virtual DOM actually improves performance. Can someone explain this in simple terms?",
+      "timestamp": "2025-06-15T10:45:00Z",
+      "likes": 8,
+      "replies": [
+        {
+          "id": "reply-1",
+          "userId": "user-2",
+          "userName": "Dr. Michael Chen",
+          "userAvatar": "/images/avatars/instructor1.jpg",
+          "userRole": "instructor",
+          "content": "Great question, Alex! The Virtual DOM is a JavaScript representation of the actual DOM. When state changes, React creates a new Virtual DOM tree, compares it with the previous one (this is called 'diffing'), and only updates the parts of the real DOM that actually changed. This is much faster than re-rendering the entire DOM.",
+          "timestamp": "2025-06-15T11:20:00Z",
+          "likes": 15,
+          "isInstructorReply": true
+        },
+        {
+          "id": "reply-2",
+          "userId": "user-6",
+          "userName": "David Kim",
+          "userAvatar": "/images/avatars/student3.jpg",
+          "userRole": "student",
+          "content": "To add to what Dr. Chen said, think of it like having a draft of a document. Instead of rewriting the entire document every time you make a change, you compare your draft with the original and only change the specific words or sentences that are different. Much more efficient!",
+          "timestamp": "2025-06-15T12:10:00Z",
+          "likes": 12
+        }
+      ],
+      "tags": ["virtual-dom", "performance", "react-basics"],
+      "isPinned": false,
+      "isResolved": true
+    },
+    {
+      "id": "discussion-2",
+      "courseId": "course-1",
+      "lessonId": "lesson-1-2",
+      "userId": "user-5",
+      "userName": "Jennifer Lee",
+      "userAvatar": "/images/avatars/student2.jpg",
+      "userRole": "student",
+      "title": "VSCode extensions for React development",
+      "content": "What are the must-have VSCode extensions for React and TypeScript development? Looking for recommendations to improve my workflow.",
+      "timestamp": "2025-06-14T15:30:00Z",
+      "likes": 5,
+      "replies": [
+        {
+          "id": "reply-3",
+          "userId": "user-4",
+          "userName": "Alex Rodriguez",
+          "userAvatar": "/images/avatars/student1.jpg",
+          "userRole": "student",
+          "content": "Here's my list: ES7+ React/Redux/React-Native snippets, Auto Rename Tag, Bracket Pair Colorizer, GitLens, and Prettier. These have made my coding much more efficient!",
+          "timestamp": "2025-06-14T16:15:00Z",
+          "likes": 8
+        },
+        {
+          "id": "reply-4",
+          "userId": "user-2",
+          "userName": "Dr. Michael Chen",
+          "userAvatar": "/images/avatars/instructor1.jpg",
+          "userRole": "instructor",
+          "content": "Great suggestions! I'd also add TypeScript Hero for import organization and Thunder Client for API testing. Don't forget to enable TypeScript strict mode for better type checking!",
+          "timestamp": "2025-06-14T17:00:00Z",
+          "likes": 18,
+          "isInstructorReply": true
+        }
+      ],
+      "tags": ["vscode", "tools", "productivity"],
+      "isPinned": true,
+      "isResolved": false
+    },
+    {
+      "id": "discussion-3",
+      "courseId": "course-3",
+      "lessonId": "lesson-3-1",
+      "userId": "user-5",
+      "userName": "Jennifer Lee",
+      "userAvatar": "/images/avatars/student2.jpg",
+      "userRole": "student",
+      "title": "Design thinking in real projects",
+      "content": "How do you apply design thinking methodology in tight deadline situations? Sometimes there's not enough time for the full empathize-define-ideate-prototype-test cycle.",
+      "timestamp": "2025-06-12T09:20:00Z",
+      "likes": 12,
+      "replies": [
+        {
+          "id": "reply-5",
+          "userId": "user-3",
+          "userName": "Sarah Johnson",
+          "userAvatar": "/images/avatars/instructor2.jpg",
+          "userRole": "instructor",
+          "content": "Excellent question! In time-constrained projects, you can compress the process. Focus on rapid user interviews (even 3-5 users), create quick sketches instead of detailed prototypes, and do guerrilla testing. The key is maintaining the user-centered mindset even when time is limited.",
+          "timestamp": "2025-06-12T10:45:00Z",
+          "likes": 22,
+          "isInstructorReply": true
+        },
+        {
+          "id": "reply-6",
+          "userId": "user-4",
+          "userName": "Alex Rodriguez",
+          "userAvatar": "/images/avatars/student1.jpg",
+          "userRole": "student",
+          "content": "I've found that even spending 30 minutes on user personas makes a huge difference in design decisions. Better than no user research at all!",
+          "timestamp": "2025-06-12T14:20:00Z",
+          "likes": 7
+        }
+      ],
+      "tags": ["design-thinking", "time-management", "user-research"],
+      "isPinned": false,
+      "isResolved": true
+    },
+    {
+      "id": "discussion-4",
+      "courseId": "course-1",
+      "lessonId": "lesson-2-1",
+      "userId": "user-6",
+      "userName": "David Kim",
+      "userAvatar": "/images/avatars/student3.jpg",
+      "userRole": "student",
+      "title": "TypeScript interfaces vs types",
+      "content": "When should I use interfaces vs types in TypeScript? I see both being used in the course examples and I'm not sure when to choose which one.",
+      "timestamp": "2025-06-10T11:30:00Z",
+      "likes": 15,
+      "replies": [
+        {
+          "id": "reply-7",
+          "userId": "user-2",
+          "userName": "Dr. Michael Chen",
+          "userAvatar": "/images/avatars/instructor1.jpg",
+          "userRole": "instructor",
+          "content": "Great question! Generally, use interfaces for object shapes that might be extended (they're open and can be merged), and types for unions, primitives, or when you need computed properties. For React props, both work well, but interfaces are often preferred for their extensibility.",
+          "timestamp": "2025-06-10T13:15:00Z",
+          "likes": 28,
+          "isInstructorReply": true
+        }
+      ],
+      "tags": ["typescript", "interfaces", "types"],
+      "isPinned": false,
+      "isResolved": true
+    },
+    {
+      "id": "discussion-5",
+      "courseId": "course-2",
+      "lessonId": "lesson-2-3",
+      "userId": "user-4",
+      "userName": "Alex Rodriguez",
+      "userAvatar": "/images/avatars/student1.jpg",
+      "userRole": "student",
+      "title": "Arrow functions vs regular functions",
+      "content": "I'm still confused about when to use arrow functions vs regular functions. Can someone clarify the differences and best practices?",
+      "timestamp": "2025-06-08T14:20:00Z",
+      "likes": 6,
+      "replies": [
+        {
+          "id": "reply-8",
+          "userId": "user-6",
+          "userName": "David Kim",
+          "userAvatar": "/images/avatars/student3.jpg",
+          "userRole": "student",
+          "content": "The main difference is how they handle 'this'. Arrow functions inherit 'this' from the enclosing scope, while regular functions have their own 'this'. For React, arrow functions are great for event handlers!",
+          "timestamp": "2025-06-08T15:45:00Z",
+          "likes": 9
+        },
+        {
+          "id": "reply-9",
+          "userId": "user-2",
+          "userName": "Dr. Michael Chen",
+          "userAvatar": "/images/avatars/instructor1.jpg",
+          "userRole": "instructor",
+          "content": "Perfect explanation, David! Also remember that arrow functions don't have their own 'arguments' object and can't be used as constructors. Use them for callbacks and short functions, regular functions for methods and when you need 'this' binding.",
+          "timestamp": "2025-06-08T16:30:00Z",
+          "likes": 20,
+          "isInstructorReply": true
+        }
+      ],
+      "tags": ["javascript", "arrow-functions", "this-binding"],
+      "isPinned": false,
+      "isResolved": true
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-1",
+      "conversationId": "conv-1",
+      "senderId": "user-4",
+      "receiverId": "user-2",
+      "senderName": "Alex Rodriguez",
+      "receiverName": "Dr. Michael Chen",
+      "content": "Hi Dr. Chen, I'm really enjoying your React course! I had a quick question about the useEffect hook that I couldn't find in the discussions.",
+      "timestamp": "2025-06-16T10:30:00Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "msg-2",
+      "conversationId": "conv-1",
+      "senderId": "user-2",
+      "receiverId": "user-4",
+      "senderName": "Dr. Michael Chen",
+      "receiverName": "Alex Rodriguez",
+      "content": "Hi Alex! Thanks for the kind words. I'm happy to help with useEffect. What specific aspect are you struggling with?",
+      "timestamp": "2025-06-16T11:15:00Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "msg-3",
+      "conversationId": "conv-1",
+      "senderId": "user-4",
+      "receiverId": "user-2",
+      "senderName": "Alex Rodriguez",
+      "receiverName": "Dr. Michael Chen",
+      "content": "I'm confused about the dependency array. When should I include a variable in the dependencies and when should I omit it?",
+      "timestamp": "2025-06-16T11:20:00Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "msg-4",
+      "conversationId": "conv-1",
+      "senderId": "user-2",
+      "receiverId": "user-4",
+      "senderName": "Dr. Michael Chen",
+      "receiverName": "Alex Rodriguez",
+      "content": "Great question! The rule is simple: include any value from component scope that's used inside useEffect. This includes props, state, and functions defined in the component. ESLint's exhaustive-deps rule can help catch missing dependencies!",
+      "timestamp": "2025-06-16T11:35:00Z",
+      "isRead": false,
+      "type": "text"
+    },
+    {
+      "id": "msg-5",
+      "conversationId": "conv-2",
+      "senderId": "user-5",
+      "receiverId": "user-3",
+      "senderName": "Jennifer Lee",
+      "receiverName": "Sarah Johnson",
+      "content": "Hi Sarah! Your design course is amazing. I'm working on my first UX project and would love some feedback on my user persona. Would you mind taking a look?",
+      "timestamp": "2025-06-15T14:20:00Z",
+      "isRead": true,
+      "type": "text"
+    },
+    {
+      "id": "msg-6",
+      "conversationId": "conv-2",
+      "senderId": "user-3",
+      "receiverId": "user-5",
+      "senderName": "Sarah Johnson",
+      "receiverName": "Jennifer Lee",
+      "content": "Hi Jennifer! I'd be happy to provide feedback. You can share your persona document through the course platform or email it to me. Looking forward to seeing your work!",
+      "timestamp": "2025-06-15T15:45:00Z",
+      "isRead": false,
+      "type": "text"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "userId": "user-4",
+      "type": "message",
+      "title": "New message from Dr. Michael Chen",
+      "content": "Great question! The rule is simple: include any value from component scope...",
+      "timestamp": "2025-06-16T11:35:00Z",
+      "isRead": false,
+      "actionUrl": "/messages/conv-1",
+      "icon": "💬"
+    },
+    {
+      "id": "notif-2",
+      "userId": "user-4",
+      "type": "course",
+      "title": "New lesson available in React Course",
+      "content": "Module 3: Advanced Hooks is now available!",
+      "timestamp": "2025-06-15T09:00:00Z",
+      "isRead": true,
+      "actionUrl": "/courses/course-1",
+      "icon": "📚"
+    },
+    {
+      "id": "notif-3",
+      "userId": "user-5",
+      "type": "message",
+      "title": "New message from Sarah Johnson",
+      "content": "Hi Jennifer! I'd be happy to provide feedback...",
+      "timestamp": "2025-06-15T15:45:00Z",
+      "isRead": false,
+      "actionUrl": "/messages/conv-2",
+      "icon": "💬"
+    },
+    {
+      "id": "notif-4",
+      "userId": "user-5",
+      "type": "achievement",
+      "title": "Achievement Unlocked!",
+      "content": "You've completed your first design project. Keep up the great work!",
+      "timestamp": "2025-06-14T16:30:00Z",
+      "isRead": true,
+      "actionUrl": "/profile/achievements",
+      "icon": "🏆"
+    }
+  ]
+}

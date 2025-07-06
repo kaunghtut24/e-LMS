@@ -1,0 +1,205 @@
+{
+  "users": [
+    {
+      "id": "user-1",
+      "email": "admin@elms.com",
+      "password": "admin123",
+      "role": "admin",
+      "firstName": "Emma",
+      "lastName": "Wilson",
+      "avatar": "/images/avatars/admin.jpg",
+      "bio": "Platform Administrator with 8+ years of experience in educational technology.",
+      "dateJoined": "2023-01-15",
+      "lastLogin": "2025-06-17T15:30:00Z",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "notifications": {
+          "email": true,
+          "browser": true,
+          "mobile": true
+        }
+      }
+    },
+    {
+      "id": "user-2",
+      "email": "instructor1@elms.com",
+      "password": "instructor123",
+      "role": "instructor",
+      "firstName": "Dr. Michael",
+      "lastName": "Chen",
+      "avatar": "/images/avatars/instructor1.jpg",
+      "bio": "Senior Software Engineer and Tech Educator with 12+ years of industry experience. Specialized in Full-Stack Development, Cloud Architecture, and Modern JavaScript frameworks.",
+      "dateJoined": "2023-02-20",
+      "lastLogin": "2025-06-17T14:45:00Z",
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/michael-chen-dev",
+        "github": "https://github.com/mchen-dev",
+        "website": "https://michaelchen.dev"
+      },
+      "expertise": ["JavaScript", "React", "Node.js", "Cloud Computing", "DevOps"],
+      "coursesCreated": 12,
+      "totalStudents": 2847,
+      "rating": 4.8,
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "notifications": {
+          "email": true,
+          "browser": true,
+          "mobile": false
+        }
+      }
+    },
+    {
+      "id": "user-3",
+      "email": "instructor2@elms.com",
+      "password": "instructor123",
+      "role": "instructor",
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "avatar": "/images/avatars/instructor2.jpg",
+      "bio": "UX/UI Design Expert and Digital Product Designer with a passion for creating beautiful, user-centered experiences. Former Design Lead at top tech companies.",
+      "dateJoined": "2023-03-10",
+      "lastLogin": "2025-06-17T13:20:00Z",
+      "socialLinks": {
+        "linkedin": "https://linkedin.com/in/sarah-johnson-design",
+        "dribbble": "https://dribbble.com/sarah-johnson",
+        "behance": "https://behance.net/sarah-johnson"
+      },
+      "expertise": ["UI/UX Design", "Figma", "Adobe Creative Suite", "Design Systems", "User Research"],
+      "coursesCreated": 8,
+      "totalStudents": 1923,
+      "rating": 4.9,
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "notifications": {
+          "email": true,
+          "browser": true,
+          "mobile": true
+        }
+      }
+    },
+    {
+      "id": "user-4",
+      "email": "student1@elms.com",
+      "password": "student123",
+      "role": "student",
+      "firstName": "Alex",
+      "lastName": "Rodriguez",
+      "avatar": "/images/avatars/student1.jpg",
+      "bio": "Computer Science student passionate about web development and AI. Currently pursuing a career in full-stack development.",
+      "dateJoined": "2024-01-15",
+      "lastLogin": "2025-06-17T15:10:00Z",
+      "enrolledCourses": ["course-1", "course-2", "course-4"],
+      "completedCourses": ["course-5"],
+      "wishlist": ["course-3", "course-6"],
+      "achievements": [
+        {
+          "id": "badge-1",
+          "name": "First Course Completed",
+          "description": "Completed your first course",
+          "earnedDate": "2024-03-20",
+          "icon": "🎓"
+        },
+        {
+          "id": "badge-2",
+          "name": "Quick Learner",
+          "description": "Completed a course in under 2 weeks",
+          "earnedDate": "2024-04-15",
+          "icon": "⚡"
+        }
+      ],
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "notifications": {
+          "email": true,
+          "browser": false,
+          "mobile": true
+        }
+      }
+    },
+    {
+      "id": "user-5",
+      "email": "student2@elms.com",
+      "password": "student123",
+      "role": "student",
+      "firstName": "Jennifer",
+      "lastName": "Lee",
+      "avatar": "/images/avatars/student2.jpg",
+      "bio": "Marketing professional looking to transition into UX design. Passionate about creating user-centered digital experiences.",
+      "dateJoined": "2024-02-08",
+      "lastLogin": "2025-06-17T12:35:00Z",
+      "enrolledCourses": ["course-3", "course-6"],
+      "completedCourses": [],
+      "wishlist": ["course-1", "course-2"],
+      "achievements": [
+        {
+          "id": "badge-3",
+          "name": "Early Adopter",
+          "description": "Joined within the first month of launch",
+          "earnedDate": "2024-02-08",
+          "icon": "🌟"
+        }
+      ],
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "notifications": {
+          "email": true,
+          "browser": true,
+          "mobile": true
+        }
+      }
+    },
+    {
+      "id": "user-6",
+      "email": "student3@elms.com",
+      "password": "student123",
+      "role": "student",
+      "firstName": "David",
+      "lastName": "Kim",
+      "avatar": "/images/avatars/student3.jpg",
+      "bio": "Senior developer looking to stay updated with the latest technologies and best practices in software development.",
+      "dateJoined": "2023-11-22",
+      "lastLogin": "2025-06-17T14:20:00Z",
+      "enrolledCourses": ["course-1", "course-4", "course-7"],
+      "completedCourses": ["course-2", "course-5"],
+      "wishlist": ["course-8"],
+      "achievements": [
+        {
+          "id": "badge-1",
+          "name": "First Course Completed",
+          "description": "Completed your first course",
+          "earnedDate": "2024-01-10",
+          "icon": "🎓"
+        },
+        {
+          "id": "badge-4",
+          "name": "Dedicated Learner",
+          "description": "Completed 3+ courses",
+          "earnedDate": "2024-05-22",
+          "icon": "📚"
+        },
+        {
+          "id": "badge-5",
+          "name": "Community Helper",
+          "description": "Helped 10+ students in discussions",
+          "earnedDate": "2024-06-01",
+          "icon": "🤝"
+        }
+      ],
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "notifications": {
+          "email": false,
+          "browser": true,
+          "mobile": false
+        }
+      }
+    }
+  ]
+}
