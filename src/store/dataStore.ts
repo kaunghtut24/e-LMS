@@ -32,6 +32,9 @@ interface DataState {
   addBookmark: (userId: string, courseId: string, lessonId: string) => void;
   removeBookmark: (userId: string, courseId: string, lessonId: string) => void;
   searchCourses: (query: string) => Course[];
+  addCourse: (course: Course) => void;
+  updateCourse: (courseId: string, updates: Partial<Course>) => void;
+  deleteCourse: (courseId: string) => void;
 }
 
 export const useDataStore = create<DataState>()((set, get) => ({
@@ -258,12 +261,32 @@ export const useDataStore = create<DataState>()((set, get) => ({
   searchCourses: (query: string) => {
     const courses = get().courses;
     const lowercaseQuery = query.toLowerCase();
-    
+
     return courses.filter(course =>
       course.title.toLowerCase().includes(lowercaseQuery) ||
       course.description.toLowerCase().includes(lowercaseQuery) ||
       course.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery)) ||
       course.instructorName.toLowerCase().includes(lowercaseQuery)
     );
+  },
+
+  addCourse: (course: Course) => {
+    set(state => ({
+      courses: [...state.courses, course]
+    }));
+  },
+
+  updateCourse: (courseId: string, updates: Partial<Course>) => {
+    set(state => ({
+      courses: state.courses.map(course =>
+        course.id === courseId ? { ...course, ...updates } : course
+      )
+    }));
+  },
+
+  deleteCourse: (courseId: string) => {
+    set(state => ({
+      courses: state.courses.filter(course => course.id !== courseId)
+    }));
   }
 }));

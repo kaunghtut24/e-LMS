@@ -91,6 +91,10 @@ export interface AboutPageContent {
     title: string;
     content: string;
   };
+  vision: {
+    title: string;
+    content: string;
+  };
   values: Array<{
     title: string;
     description: string;

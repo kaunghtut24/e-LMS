@@ -58,6 +58,10 @@ const defaultContent: CMSData = {
       title: "Our Mission",
       content: "To empower individuals worldwide with the skills and knowledge they need to succeed in an ever-evolving digital economy. We believe that learning should be engaging, practical, and accessible to all."
     },
+    vision: {
+      title: "Our Vision",
+      content: "A world where geographical boundaries don't limit educational opportunities, where anyone with the desire to learn can access the same quality of education as those in the world's leading universities and institutions."
+    },
     values: [
       {
         title: "Excellence",
