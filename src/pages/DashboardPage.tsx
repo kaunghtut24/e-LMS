@@ -1,21 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  BookOpen,
-  Clock,
-  TrendingUp,
-  Award,
-  Play,
-  Calendar,
-  Target,
-  Star,
-  ChevronRight,
-  BarChart3,
-  Users,
-  CheckCircle,
-  AlertCircle,
-  BookmarkIcon
-} from 'lucide-react';
+import { BookOpen, Clock, TrendingUp, Award, Play, Calendar, Target, Star, ChevronRight, BarChart3, Users, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Bookmark as BookmarkIcon } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDataStore } from '../store/dataStore';
 import { getUserDisplayName } from '../lib/profileAdapter';
