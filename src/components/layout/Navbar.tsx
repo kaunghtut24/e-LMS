@@ -32,6 +32,7 @@ import { Badge } from '../ui/badge';
 import { useAuthStore } from '../../store/authStore';
 import { useDataStore } from '../../store/dataStore';
 import { useTheme } from '../ThemeProvider';
+import { getUserInitials, getUserDisplayName, getUserRole, hasRole } from '../../lib/profileAdapter';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,16 +69,16 @@ const Navbar: React.FC = () => {
     { path: '/contact', label: 'Contact' },
   ];
 
-  const getUserInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'admin':
         return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
       case 'instructor':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'mentor':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'employer':
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300';
       default:
         return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
     }
@@ -194,9 +195,9 @@ const Navbar: React.FC = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.avatar} alt={user.firstName} />
+                        <AvatarImage src={user.avatar_url || ''} alt={getUserDisplayName(user)} />
                         <AvatarFallback>
-                          {getUserInitials(user.firstName, user.lastName)}
+                          {getUserInitials(user)}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
@@ -205,7 +206,7 @@ const Navbar: React.FC = () => {
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {user.firstName} {user.lastName}
+                          {getUserDisplayName(user)}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
                           {user.email}
@@ -226,9 +227,11 @@ const Navbar: React.FC = () => {
                           <BookOpen className="mr-2 h-4 w-4" />
                         )}
                         <span>
-                          {user.role === 'student' && 'My Courses'}
+                          {user.role === 'learner' && 'My Courses'}
                           {user.role === 'instructor' && 'Instructor Dashboard'}
                           {user.role === 'admin' && 'Admin Dashboard'}
+                          {user.role === 'mentor' && 'Mentor Dashboard'}
+                          {user.role === 'employer' && 'Employer Dashboard'}
                         </span>
                       </Link>
                     </DropdownMenuItem>

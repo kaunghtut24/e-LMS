@@ -60,12 +60,14 @@ const RegisterPage: React.FC = () => {
 
     try {
       const success = await register({
+        email: formData.email,
+        password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        email: formData.email,
-        bio: `New student at EduLearn. Excited to start learning!`,
+        role: 'learner',
+        accountType: 'b2c',
       });
-      
+
       if (success) {
         toast.success('Welcome to EduLearn! Your account has been created successfully.');
         navigate('/dashboard');

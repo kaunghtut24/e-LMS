@@ -33,13 +33,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import RoleDashboardRouter from './components/RoleDashboardRouter';
 
 function App() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, initialize } = useAuthStore();
   const { loadData } = useDataStore();
 
   useEffect(() => {
-    // Load all data when app starts
+    initialize();
     loadData();
-  }, [loadData]);
+  }, [initialize, loadData]);
 
   return (
     <ThemeProvider>

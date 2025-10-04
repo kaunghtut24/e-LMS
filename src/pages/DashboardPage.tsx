@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useDataStore } from '../store/dataStore';
+import { getUserDisplayName } from '../lib/profileAdapter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -110,10 +111,10 @@ const DashboardPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold text-foreground">
-                  Welcome back, {user.firstName}! 👋
+                  Welcome back, {user.first_name}! 👋
                 </h1>
                 <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                  Student Dashboard
+                  {user.role === 'learner' ? 'Student' : user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard
                 </Badge>
               </div>
               <p className="text-muted-foreground mt-2">
