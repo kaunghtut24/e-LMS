@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '../lib/supabase';
+import { LOCAL_AUTH_ENABLED, getMockUser } from '../config/localAuth';
 import type { Profile, ProfileInsert } from '../types/enhanced';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
@@ -37,6 +38,14 @@ export const useAuthStore = create<AuthState>()(
 
       initialize: async () => {
         set({ isLoading: true });
+
+        // Check for local development authentication
+        if (LOCAL_AUTH_ENABLED) {
+          // For local auth, we don't persist sessions automatically
+          // Users need to login each time
+          set({ isLoading: false });
+          return;
+        }
 
         try {
           const { data: { session }, error } = await supabase.auth.getSession();
@@ -93,6 +102,34 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string): Promise<boolean> => {
         set({ isLoading: true });
 
+        // Check for local development authentication
+        if (LOCAL_AUTH_ENABLED) {
+          const mockUser = getMockUser(email);
+
+          if (mockUser && mockUser.password === password) {
+            // Simulate async login
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const now = new Date().toISOString();
+            const profile = {
+              ...mockUser.profile,
+              last_login: now,
+            };
+
+            set({
+              user: profile,
+              supabaseUser: { id: profile.id, email: profile.email } as any,
+              isAuthenticated: true,
+              isLoading: false,
+            });
+            return true;
+          }
+
+          set({ isLoading: false });
+          return false;
+        }
+
+        // Original Supabase authentication
         try {
           const { data, error } = await supabase.auth.signInWithPassword({
             email,
@@ -109,13 +146,14 @@ export const useAuthStore = create<AuthState>()(
               .maybeSingle();
 
             if (profile) {
+              const now = new Date().toISOString();
               await supabase
                 .from('profiles')
-                .update({ last_login: new Date().toISOString() })
+                .update({ last_login: now } as any)
                 .eq('id', data.user.id);
 
               set({
-                user: { ...profile, last_login: new Date().toISOString() },
+                user: { ...profile, last_login: now } as Profile,
                 supabaseUser: data.user,
                 isAuthenticated: true,
                 isLoading: false,
@@ -134,6 +172,16 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: async () => {
+        // For local auth, just clear the state
+        if (LOCAL_AUTH_ENABLED) {
+          set({
+            user: null,
+            supabaseUser: null,
+            isAuthenticated: false,
+          });
+          return;
+        }
+
         try {
           await supabase.auth.signOut();
           set({
@@ -186,7 +234,7 @@ export const useAuthStore = create<AuthState>()(
 
             const { data: profile, error: profileError } = await supabase
               .from('profiles')
-              .insert(profileData)
+              .insert(profileData as any)
               .select()
               .single();
 
@@ -217,14 +265,14 @@ export const useAuthStore = create<AuthState>()(
         try {
           const { data, error } = await supabase
             .from('profiles')
-            .update(userData)
+            .update(userData as any)
             .eq('id', user.id)
             .select()
             .single();
 
           if (error) throw error;
 
-          set({ user: data });
+          set({ user: data as Profile });
           return true;
         } catch (error) {
           console.error('Update profile error:', error);

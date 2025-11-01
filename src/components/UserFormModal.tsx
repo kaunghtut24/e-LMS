@@ -39,7 +39,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
     firstName: '',
     lastName: '',
     email: '',
-    role: 'student',
+    role: 'learner',
     bio: '',
     avatar: '',
   });
@@ -52,7 +52,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         firstName: initialData.firstName || '',
         lastName: initialData.lastName || '',
         email: initialData.email || '',
-        role: initialData.role || 'student',
+        role: initialData.role || 'learner',
         bio: initialData.bio || '',
         avatar: initialData.avatar || '',
       });
@@ -61,7 +61,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         firstName: '',
         lastName: '',
         email: '',
-        role: 'student',
+        role: 'learner',
         bio: '',
         avatar: '',
       });
@@ -174,14 +174,23 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="student">Student</SelectItem>
-                <SelectItem value="instructor">Instructor</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="learner">Learner (Student)</SelectItem>
+                <SelectItem value="instructor">Instructor (Teacher)</SelectItem>
+                <SelectItem value="mentor">Mentor (Guide)</SelectItem>
+                <SelectItem value="employer">Employer (B2B)</SelectItem>
+                <SelectItem value="admin">Admin (Full Access)</SelectItem>
               </SelectContent>
             </Select>
             {errors.role && (
               <p className="text-sm text-red-500">{errors.role}</p>
             )}
+            <p className="text-xs text-muted-foreground">
+              {formData.role === 'learner' && 'Can enroll in courses and track progress'}
+              {formData.role === 'instructor' && 'Can create and manage courses'}
+              {formData.role === 'mentor' && 'Can guide and monitor students'}
+              {formData.role === 'employer' && 'Can manage organizational courses'}
+              {formData.role === 'admin' && 'Full system access and user management'}
+            </p>
           </div>
 
           <div className="space-y-2">

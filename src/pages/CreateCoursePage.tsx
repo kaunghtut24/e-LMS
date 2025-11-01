@@ -191,7 +191,7 @@ const CreateCoursePage: React.FC = () => {
         slug: courseData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
         ...courseData,
         instructorId: user?.id || '',
-        instructorName: `${user?.firstName} ${user?.lastName}` || 'Unknown Instructor',
+        instructorName: `${user?.first_name} ${user?.last_name}` || 'Unknown Instructor',
         totalLessons: courseData.modules.reduce((total, module) => total + module.lessons.length, 0),
         totalStudents: 0,
         rating: 0,

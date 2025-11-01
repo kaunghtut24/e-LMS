@@ -55,6 +55,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../components/ui/dropdown-menu';
+import InstructorAnalytics from '../components/analytics/InstructorAnalytics';
 
 const InstructorDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -173,7 +174,7 @@ const InstructorDashboard: React.FC = () => {
                 </Badge>
               </div>
               <p className="text-muted-foreground mt-2">
-                Welcome back, {user.firstName}! Manage your courses and track student progress.
+                Welcome back, {user.first_name}! Manage your courses and track student progress.
               </p>
             </div>
             <div className="flex items-center space-x-3">
@@ -651,132 +652,8 @@ const InstructorDashboard: React.FC = () => {
           </TabsContent>
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Course Analytics</h2>
-                <p className="text-muted-foreground">Detailed insights into your course performance</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Select defaultValue="30">
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="7">Last 7 days</SelectItem>
-                    <SelectItem value="30">Last 30 days</SelectItem>
-                    <SelectItem value="90">Last 3 months</SelectItem>
-                    <SelectItem value="365">Last year</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Report
-                </Button>
-              </div>
-            </div>
-
-            {/* Analytics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Revenue</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">
-                    ${(instructorStats.totalRevenue * 0.1).toLocaleString()}
-                  </div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+12.5%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Enrollments</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {Math.floor(instructorStats.totalStudents * 0.15)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+8.2%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Completion Rate</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-purple-600">
-                    {instructorStats.averageCompletion}%
-                  </div>
-                  <p className="text-xs text-muted-foreground">Average</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+3.1%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Engagement</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-orange-600">
-                    {Math.floor(Math.random() * 20) + 75}%
-                  </div>
-                  <p className="text-xs text-muted-foreground">Active students</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+5.7%</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Course Performance Chart */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Course Performance</CardTitle>
-                  <CardDescription>Student enrollment and completion trends</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-accent/20 rounded-lg">
-                    <div className="text-center">
-                      <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-muted-foreground">Chart visualization would be here</p>
-                      <p className="text-xs text-muted-foreground">Integration with charting library needed</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Student Engagement</CardTitle>
-                  <CardDescription>Time spent and activity patterns</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-accent/20 rounded-lg">
-                    <div className="text-center">
-                      <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-muted-foreground">Engagement metrics chart</p>
-                      <p className="text-xs text-muted-foreground">Shows lesson completion patterns</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="analytics">
+            <InstructorAnalytics />
           </TabsContent>
 
           {/* Reviews Tab */}

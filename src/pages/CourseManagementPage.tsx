@@ -70,7 +70,7 @@ interface Course {
 const CourseManagementPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { courses: allCourses, categories, updateCourse, deleteCourse } = useDataStore();
+  const { courses: allCourses, categories, updateCourse, deleteCourse, isLoading: loading } = useDataStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -127,7 +127,7 @@ const CourseManagementPage: React.FC = () => {
       const newStatus = currentStatus === 'published' ? 'draft' : 'published';
       updateCourse(courseId, {
         status: newStatus,
-        publishedDate: newStatus === 'published' ? new Date().toISOString() : ''
+        published_at: newStatus === 'published' ? new Date().toISOString() : null
       });
       toast.success(`Course ${newStatus === 'published' ? 'published' : 'unpublished'} successfully`);
     } catch (error) {
@@ -295,7 +295,7 @@ const CourseManagementPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${courses.reduce((sum, course) => sum + course.revenue, 0).toLocaleString()}
+              ${filteredCourses.reduce((sum, course) => sum + (course.price * (course.totalStudents || 0)), 0).toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
               All time earnings
@@ -309,8 +309,8 @@ const CourseManagementPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {courses.length > 0 
-                ? (courses.reduce((sum, course) => sum + course.rating, 0) / courses.length).toFixed(1)
+              {filteredCourses.length > 0 
+                ? (filteredCourses.reduce((sum, course) => sum + course.rating, 0) / filteredCourses.length).toFixed(1)
                 : '0.0'
               }
             </div>

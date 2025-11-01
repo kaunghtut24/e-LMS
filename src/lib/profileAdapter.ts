@@ -6,7 +6,7 @@ export function profileToUser(profile: Profile): User {
     id: profile.id,
     email: profile.email,
     role: profile.role === 'learner' ? 'student' : profile.role === 'admin' ? 'admin' : 'instructor',
-    status: profile.status,
+    status: profile.status === 'active' ? 'active' : 'suspended',
     firstName: profile.first_name,
     lastName: profile.last_name,
     avatar: profile.avatar_url || '',

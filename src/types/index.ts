@@ -224,6 +224,32 @@ export interface Category {
   subcategories: string[];
 }
 
+export interface Skill {
+  id: string;
+  name: string;
+  category_id?: string;
+  description?: string;
+  created_at: string;
+}
+
+export interface Profile {
+  id: string;
+  email: string;
+  role: 'learner' | 'instructor' | 'mentor' | 'employer' | 'admin';
+  first_name: string;
+  last_name: string;
+  avatar_url?: string;
+  bio?: string;
+  phone?: string;
+  location?: string;
+  expertise?: string[];
+  organization_id?: string;
+  account_type: 'b2c' | 'b2b';
+  preferences?: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CourseRating {
   courseId: string;
   averageRating: number;

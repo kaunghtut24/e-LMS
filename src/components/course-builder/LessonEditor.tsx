@@ -112,32 +112,110 @@ const LessonEditor: React.FC<LessonEditorProps> = ({
   const renderVideoEditor = () => (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Video URL</Label>
-        <Input
-          placeholder="Enter video URL or upload video file"
-          value={editingLesson.content.videoUrl || ''}
-          onChange={(e) => updateContent({ videoUrl: e.target.value })}
-        />
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Upload className="w-4 h-4 mr-2" />
-            Upload Video
-          </Button>
-          <Button variant="outline" size="sm">
-            <Video className="w-4 h-4 mr-2" />
-            Record Video
-          </Button>
-        </div>
+        <Label>Video Source</Label>
+        <Select
+          value={editingLesson.content.videoSource || 'url'}
+          onValueChange={(value) => updateContent({ videoSource: value })}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="url">Direct URL</SelectItem>
+            <SelectItem value="youtube">YouTube</SelectItem>
+            <SelectItem value="vimeo">Vimeo</SelectItem>
+            <SelectItem value="embed">Embed Code</SelectItem>
+            <SelectItem value="upload">Upload File</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
+
+      {editingLesson.content.videoSource === 'youtube' && (
+        <div className="space-y-2">
+          <Label>YouTube Video ID or URL</Label>
+          <Input
+            placeholder="e.g., dQw4w9WgXcQ or https://youtube.com/watch?v=dQw4w9WgXcQ"
+            value={editingLesson.content.videoUrl || ''}
+            onChange={(e) => updateContent({ videoUrl: e.target.value })}
+          />
+          <p className="text-xs text-muted-foreground">
+            Enter YouTube video ID or full URL. Will be embedded automatically.
+          </p>
+        </div>
+      )}
+
+      {editingLesson.content.videoSource === 'vimeo' && (
+        <div className="space-y-2">
+          <Label>Vimeo Video ID or URL</Label>
+          <Input
+            placeholder="e.g., 123456789 or https://vimeo.com/123456789"
+            value={editingLesson.content.videoUrl || ''}
+            onChange={(e) => updateContent({ videoUrl: e.target.value })}
+          />
+          <p className="text-xs text-muted-foreground">
+            Enter Vimeo video ID or full URL. Will be embedded automatically.
+          </p>
+        </div>
+      )}
+
+      {editingLesson.content.videoSource === 'embed' && (
+        <div className="space-y-2">
+          <Label>Embed Code</Label>
+          <Textarea
+            placeholder="Paste embed code here (iframe or video tag)"
+            rows={6}
+            value={editingLesson.content.embedCode || ''}
+            onChange={(e) => updateContent({ embedCode: e.target.value })}
+          />
+          <p className="text-xs text-muted-foreground">
+            Paste the embed code from any video platform
+          </p>
+        </div>
+      )}
+
+      {(editingLesson.content.videoSource === 'url' || editingLesson.content.videoSource === 'upload') && (
+        <div className="space-y-2">
+          <Label>Video URL</Label>
+          <Input
+            placeholder="Enter direct video URL (.mp4, .webm, etc.)"
+            value={editingLesson.content.videoUrl || ''}
+            onChange={(e) => updateContent({ videoUrl: e.target.value })}
+          />
+          <div className="flex items-center space-x-2">
+            <Button type="button" variant="outline" size="sm">
+              <Upload className="w-4 h-4 mr-2" />
+              Upload Video
+            </Button>
+            <Button type="button" variant="outline" size="sm">
+              <Video className="w-4 h-4 mr-2" />
+              Record Video
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <Label>Video Duration</Label>
+        <Input
+          placeholder="e.g., 10:30"
+          value={editingLesson.content.videoDuration || ''}
+          onChange={(e) => updateContent({ videoDuration: e.target.value })}
+        />
+      </div>
+
       <div className="space-y-2">
         <Label>Video Transcript (Optional)</Label>
         <Textarea
-          placeholder="Add video transcript for accessibility..."
+          placeholder="Add video transcript for accessibility and SEO..."
           rows={6}
           value={editingLesson.content.transcript || ''}
           onChange={(e) => updateContent({ transcript: e.target.value })}
         />
+        <p className="text-xs text-muted-foreground">
+          Transcripts improve accessibility and help with searchability
+        </p>
       </div>
+
       <div className="space-y-2">
         <Label>Video Thumbnail</Label>
         <Input
@@ -145,6 +223,22 @@ const LessonEditor: React.FC<LessonEditorProps> = ({
           value={editingLesson.content.thumbnailUrl || ''}
           onChange={(e) => updateContent({ thumbnailUrl: e.target.value })}
         />
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={editingLesson.content.allowDownload || false}
+          onCheckedChange={(checked) => updateContent({ allowDownload: checked })}
+        />
+        <Label>Allow students to download video</Label>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={editingLesson.content.enableNotes || false}
+          onCheckedChange={(checked) => updateContent({ enableNotes: checked })}
+        />
+        <Label>Enable timestamped notes</Label>
       </div>
     </div>
   );

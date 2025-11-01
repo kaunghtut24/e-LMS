@@ -23,7 +23,9 @@ const RoleDashboardRouter: React.FC = () => {
       return <AdminDashboard />;
     case 'instructor':
       return <InstructorDashboard />;
-    case 'student':
+    case 'learner':
+    case 'mentor':
+    case 'employer':
       return <DashboardPage />;
     default:
       // Fallback for unknown roles

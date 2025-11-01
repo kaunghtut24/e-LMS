@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { User } from '../types';
+import type { Profile } from '../types/enhanced';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: User['role'] | User['role'][];
+  requiredRole?: Profile['role'] | Profile['role'][];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 

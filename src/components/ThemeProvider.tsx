@@ -18,8 +18,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Set theme from user preferences or default to system
-    if (user?.preferences?.theme) {
-      setTheme(user.preferences.theme);
+    const prefs = user?.preferences as any;
+    if (prefs?.theme) {
+      setTheme(prefs.theme);
     }
   }, [user]);
 

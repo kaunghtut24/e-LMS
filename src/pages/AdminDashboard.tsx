@@ -41,6 +41,7 @@ import {
 import { useAuthStore } from '../store/authStore';
 import { useDataStore } from '../store/dataStore';
 import { useUserStore } from '../store/userStore';
+import { toast } from 'sonner';
 import UserFormModal from '../components/UserFormModal';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -78,6 +79,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../components/ui/alert-dialog';
+import AdminAnalytics from '../components/analytics/AdminAnalytics';
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuthStore();
@@ -89,6 +91,7 @@ const AdminDashboard: React.FC = () => {
     updateUserStatus,
     updateUserRole,
     deleteUser,
+    addUser,
     getTotalUsers,
     getActiveUsers,
     getUsersByRole,
@@ -148,14 +151,20 @@ const AdminDashboard: React.FC = () => {
     setShowAddUserModal(false);
   };
 
-  const handleUpdateUser = (userData: any) => {
+  const handleUpdateUser = async (userData: any) => {
     if (selectedUser) {
-      // Update user role if changed
-      if (userData.role !== selectedUser.role) {
-        updateUserRole(selectedUser.id, userData.role);
+      try {
+        // Update user role if changed
+        if (userData.role !== selectedUser.role) {
+          await updateUserRole(selectedUser.id, userData.role);
+          toast.success(`User role updated to ${userData.role}. User must log out and log back in to see changes.`);
+        }
+        // In a real app, you would also update other user fields
+        console.log('Updating user:', selectedUser.id, userData);
+      } catch (error) {
+        toast.error('Failed to update user role. Please try again.');
+        console.error('Error updating user:', error);
       }
-      // In a real app, you would also update other user fields
-      console.log('Updating user:', selectedUser.id, userData);
     }
     setShowEditUserModal(false);
     setSelectedUser(null);
@@ -952,132 +961,8 @@ const AdminDashboard: React.FC = () => {
           </TabsContent>
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Platform Analytics</h2>
-                <p className="text-muted-foreground">Comprehensive platform performance metrics</p>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Select defaultValue="30">
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="7">Last 7 days</SelectItem>
-                    <SelectItem value="30">Last 30 days</SelectItem>
-                    <SelectItem value="90">Last 3 months</SelectItem>
-                    <SelectItem value="365">Last year</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Report
-                </Button>
-              </div>
-            </div>
-
-            {/* Analytics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Monthly Revenue</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">
-                    ${(platformStats.totalRevenue * 0.1).toLocaleString()}
-                  </div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+15.2%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">New Users</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {Math.floor(platformStats.totalUsers * 0.2)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+8.7%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Course Completions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-purple-600">
-                    {Math.floor(platformStats.totalEnrollments * 0.3)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                    <span className="text-xs text-green-600">+12.1%</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Active Sessions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-orange-600">
-                    {Math.floor(Math.random() * 500) + 200}
-                  </div>
-                  <p className="text-xs text-muted-foreground">Right now</p>
-                  <div className="flex items-center space-x-1 mt-2">
-                    <Activity className="w-3 h-3 text-blue-500" />
-                    <span className="text-xs text-blue-600">Live</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Charts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Revenue Trends</CardTitle>
-                  <CardDescription>Monthly revenue and growth patterns</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-accent/20 rounded-lg">
-                    <div className="text-center">
-                      <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-muted-foreground">Revenue chart visualization</p>
-                      <p className="text-xs text-muted-foreground">Integration with charting library needed</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>User Growth</CardTitle>
-                  <CardDescription>User registration and activity trends</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64 flex items-center justify-center bg-accent/20 rounded-lg">
-                    <div className="text-center">
-                      <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-muted-foreground">User growth chart</p>
-                      <p className="text-xs text-muted-foreground">Shows registration patterns</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="analytics">
+            <AdminAnalytics />
           </TabsContent>
 
           {/* Moderation Tab */}
