@@ -277,3 +277,6 @@ export interface AuthState {
   register: (userData: Partial<User>) => Promise<boolean>;
   updateProfile: (userData: Partial<User>) => void;
 }
+
+// Export Phase 3 types
+export * from './phase3-assessment';
