@@ -280,3 +280,4 @@ export interface AuthState {
 
 // Export Phase 3 types
 export * from './phase3-assessment';
+export * from './phase3-forums';
